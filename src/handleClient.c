@@ -1,6 +1,18 @@
 #include "handleClient.h"
 
-void *handleClient(void *arg)
+#define BUFF_SIZE 1024
+
+int handleClient(int client_fd)
 {
-    // To be implemented
+    char buffer[BUFF_SIZE] = {0};
+
+    if (recv(client_fd, buffer, BUFF_SIZE - 1, 0) < 0)
+    {
+        perror("Could not receive message.\n");
+        return EXIT_FAILURE;
+    }
+
+    printf("%s", buffer);
+
+    return EXIT_SUCCESS;
 }

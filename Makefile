@@ -17,7 +17,7 @@ all: $(TARGET)
 
 # Linking
 $(TARGET): $(OBJ_FILES)
-	$(CC) $(CFLAGS) $< -o $@
+	$(CC) $(CFLAGS) $(OBJ_FILES) -o $@
 
 # Compiling each source file to object
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c

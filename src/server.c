@@ -66,7 +66,7 @@ int main()
     {
         pthread_mutex_lock(&mutex);
 
-        printf("Waiting for connections...\n");
+        // printf("Waiting for connections...\n");
 
         int poll_count = poll(poll_fds, nfds, -1);
         if (poll_count < 0)
@@ -92,7 +92,7 @@ int main()
                         continue;
                     }
 
-                    printf("Connection accepted.\n");
+                    // printf("Connection accepted.\n");
 
                     if (nfds < MAX_CLIENTS + 1)
                     {

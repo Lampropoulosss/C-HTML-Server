@@ -1,5 +1,8 @@
 #include "taskQueue.h"
 
+#include <stdlib.h>
+#include <stdio.h>
+
 void initQueue(Queue *queue)
 {
     queue->front = queue->rear = NULL;

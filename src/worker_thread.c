@@ -1,5 +1,11 @@
 #include "worker_thread.h"
 
+#include "handleClient.h"
+#include "taskQueue.h"
+#include <pthread.h>
+#include <stdlib.h>
+#include <unistd.h>
+
 #define WORKER_THREADS 2
 
 extern Queue task_queue; // Initialized in server.c

@@ -5,13 +5,14 @@ CFLAGS = -Wall -Wextra -pedantic
 SRC_DIR = src
 OBJ_DIR = obj
 BIN_DIR = bin
+PUBLIC_DIR = public
 
 TARGET = $(BIN_DIR)/server
 
 SRC_FILES = $(wildcard $(SRC_DIR)/*.c)
 OBJ_FILES = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC_FILES))
 
-$(shell mkdir -p $(OBJ_DIR) $(BIN_DIR))
+$(shell mkdir -p $(OBJ_DIR) $(BIN_DIR) $(PUBLIC_DIR))
 
 all: $(TARGET)
 

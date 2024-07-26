@@ -24,6 +24,11 @@ $(TARGET): $(OBJ_FILES)
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
+
+production: CFLAGS += -O2
+production: all
+
+
 # Clean up build files
 clean:
 	rm -rf $(OBJ_DIR)/*.o $(BIN_DIR)/*

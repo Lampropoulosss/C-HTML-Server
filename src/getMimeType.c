@@ -70,6 +70,10 @@ const char *get_mime_type(const char *path)
     {
         return "audio/mpeg";
     }
+    else if (strcasecmp(ext, ".txt") == 0)
+    {
+        return "text/plain";
+    }
 
     return "application/octet-stream"; // Default binary type
 }

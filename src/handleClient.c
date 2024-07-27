@@ -65,14 +65,13 @@ int handleClient(int client_fd)
     size_t full_path_len = strlen(absolute_public_path) + strlen(path) + 1;
 
     char full_path[full_path_len];
-    full_path[full_path_len - 1] = '\0';
 
     snprintf(full_path, full_path_len, "%s%s", absolute_public_path, path);
 
-    char resolved_full_path[full_path_len];
-    if (!realpath(full_path, resolved_full_path))
+    char *resolved_full_path = realpath(full_path, NULL);
+    if (!resolved_full_path)
     {
-        fprintf(stderr, "Could not resolve requested file path.\nPath: %s\n", resolved_full_path);
+        fprintf(stderr, "Could not resolve requested file path.\nPath: %s\n", full_path);
         printf("===================================\n");
         send(client_fd, NOT_FOUND, strlen(NOT_FOUND), 0);
         free(absolute_public_path);
@@ -102,18 +101,20 @@ int handleClient(int client_fd)
         return EXIT_FAILURE;
     }
 
+    free(resolved_full_path);
+
     char file_buffer[BUFF_SIZE] = {0};
     ssize_t bytes_read;
 
     // temporarily use file_buffer for the headers
-    snprintf(file_buffer, BUFF_SIZE,
-             "HTTP/1.1 200 OK\r\n"
-             "Content-Type: %s\r\n"
-             "Connection: keep-alive\r\n"
-             "\r\n",
-             get_mime_type(path));
+    int header_length = snprintf(file_buffer, BUFF_SIZE,
+                                 "HTTP/1.1 200 OK\r\n"
+                                 "Content-Type: %s\r\n"
+                                 "Connection: keep-alive\r\n"
+                                 "\r\n",
+                                 get_mime_type(path));
 
-    if (send(client_fd, file_buffer, strlen(file_buffer), 0) < 0)
+    if (send(client_fd, file_buffer, header_length, 0) < 0)
     {
         perror("Could not send headers.\n");
         printf("===================================\n");
@@ -133,6 +134,8 @@ int handleClient(int client_fd)
             return EXIT_FAILURE;
         }
     }
+
+    close(file_fd);
 
     printf("Request received:\n\n");
     // printf("%s\n", buffer);

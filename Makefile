@@ -16,6 +16,9 @@ $(shell mkdir -p $(OBJ_DIR) $(BIN_DIR) $(PUBLIC_DIR))
 
 all: $(TARGET)
 
+production: CFLAGS += -O2
+production: all
+
 # Linking
 $(TARGET): $(OBJ_FILES)
 	$(CC) $(CFLAGS) $(OBJ_FILES) -o $@
@@ -25,12 +28,8 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 
-production: CFLAGS += -O2
-production: all
-
-
 # Clean up build files
 clean:
 	rm -rf $(OBJ_DIR)/*.o $(BIN_DIR)/*
 
-.PHONY: all clean
+.PHONY: all clean production

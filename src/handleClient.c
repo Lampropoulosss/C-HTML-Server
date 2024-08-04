@@ -91,9 +91,9 @@ int handleClient(int client_fd)
 
     free(absolute_public_path);
 
-    int file_fd;
+    FILE *file;
 
-    if ((file_fd = open(resolved_full_path, O_RDONLY)) < 0)
+    if ((file = fopen(resolved_full_path, "rb")) == NULL)
     {
         perror("Could not open file.\n");
         printf("===================================\n");
@@ -119,23 +119,23 @@ int handleClient(int client_fd)
         perror("Could not send headers.\n");
         printf("===================================\n");
         send(client_fd, SERVER_ERROR, strlen(SERVER_ERROR), 0);
-        close(file_fd);
+        fclose(file);
         return EXIT_FAILURE;
     }
 
-    while ((bytes_read = read(file_fd, file_buffer, BUFF_SIZE)) > 0)
+    while ((bytes_read = fread(file_buffer, 1, BUFF_SIZE, file)) > 0)
     {
         if (send(client_fd, file_buffer, bytes_read, 0) < 0)
         {
             perror("Could not send file.\n");
             printf("===================================\n");
             send(client_fd, SERVER_ERROR, strlen(SERVER_ERROR), 0);
-            close(file_fd);
+            fclose(file);
             return EXIT_FAILURE;
         }
     }
 
-    close(file_fd);
+    fclose(file);
 
     printf("Request received:\n\n");
     // printf("%s\n", buffer);
